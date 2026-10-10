@@ -263,6 +263,34 @@ npx vite build          # 或 node ./node_modules/vite/bin/vite.js build
 | 学习进度 | 存浏览器 localStorage，**不跨设备同步**，换浏览器/清缓存会丢失 |
 | 链接性质 | CloudStudio 沙箱链接适合分享与临时访问；要长期固定域名请自行托管到对象存储或 Vercel 等平台 |
 
+### 部署到 GitHub Pages（免费 · 固定地址 · 可绑自己的域名）
+
+仓库已内置自动部署工作流 `.github/workflows/deploy-pages.yml`，**推送到 main 即自动构建并发布**，不用手工传文件。
+
+只需配置一次：
+
+1. 在 GitHub 新建一个**空仓库**（不要勾选 README / .gitignore / License）
+2. 在项目目录执行（替换成你的用户名和仓库名）：
+
+```bash
+git remote add origin https://github.com/<用户名>/<仓库名>.git
+git branch -M main
+git push -u origin main
+```
+
+3. 打开仓库 **Settings → Pages → Source**，选择 **GitHub Actions**
+
+首次推送后 Actions 会自动跑一次，完成后地址固定为：
+
+```
+https://<用户名>.github.io/<仓库名>/
+```
+
+之后每次改动只要 `git push`，站点自动更新。
+
+> **自定义域名**：Pages 设置里填入你的域名，再到域名服务商添加一条 CNAME 记录指向 `<用户名>.github.io` 即可。
+> **其它平台**：`dist/` 是标准静态产物，同样可直接上传到腾讯云 COS 静态网站、Vercel、Netlify 等。
+
 ### 本地开发（连数据库）
 
 保持原样：先启动后端（8080）再 `npm run dev`（8000），此时走的是 MySQL 实时数据，页面不会出现静态数据提示条。
