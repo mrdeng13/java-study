@@ -5,6 +5,7 @@
 用法：python scripts/export_static_data.py
 """
 import io
+import json
 import os
 import subprocess
 import sys
@@ -22,7 +23,9 @@ USER, PWD = 'root', '123456'
 
 
 def query():
-    cmd = [MYSQL, '-u' + USER, '-p' + PWD, '-N', '-B', '-e',
+    # --raw 必须加：mysql batch 模式默认会把值里的 \ 转义成 \\、换行转成 \n，
+    # JSON 文本里的 \" 变 \\" 后写盘就是坏 JSON（曾导致 14 个文件线上加载失败）。
+    cmd = [MYSQL, '-u' + USER, '-p' + PWD, '-N', '-B', '--raw', '-e',
            'SELECT name, data FROM json_doc', DB]
     r = subprocess.run(cmd, capture_output=True)
     if r.returncode != 0:
@@ -41,6 +44,11 @@ def main():
         if not line.strip():
             continue
         name, js = line.split('\t', 1)
+        # 逐文件校验：不是合法 JSON 立即报错退出，绝不让坏文件静默进仓库
+        try:
+            json.loads(js)
+        except ValueError as e:
+            raise SystemExit('导出的 %s.json 不是合法 JSON（%s）——请检查 mysql 导出转义' % (name, e))
         p = os.path.join(OUT_DIR, name + '.json')
         with io.open(p, 'w', encoding='utf-8') as f:
             f.write(js)
