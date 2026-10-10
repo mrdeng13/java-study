@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Java 全栈开发师 · 保姆级从 0 到 1 修炼手册</title>
+  <link rel="stylesheet" href="./style.css">
+  <!-- Octopus RUM —— 由 Rush 自动注入，请勿手动修改 -->
+  <script src="https://octopus-app.zhenguanyu.com/octopus-sdk/rum/1.3.2/browser-rum.min.js" defer id="octopus-rum-sdk"></script>
+  <script>
+    (function () {
+      var RUSH_PREVIEW_IFRAME_ID = "rush-preview-iframe";
+      var REPORT_URL = "https://k79ugfzimkn5-preview.rush.zhenguanyu.com/agent/api/rum/events";
+      var PROJECT_ID = "k79ugfzimkn5";
+
+  // 同 ts 版语义，ES5 风格（html 内联脚本无构建步骤）
+  var __rushCollectUrl;
+  var __rushGetCollectUrl = function() {
+    if (__rushCollectUrl === undefined) {
+      try {
+        __rushCollectUrl = new URL("https://k79ugfzimkn5-preview.rush.zhenguanyu.com/agent/api/rum/events");
+      } catch (err) {
+        __rushCollectUrl = null;
+      }
+    }
+    return __rushCollectUrl;
+  };
+
+  function __rushIsCollectUrl(url) {
+    var collect = __rushGetCollectUrl();
+    if (!collect || !url) {
+      return false;
+    }
+    try {
+      var parsed = new URL(url, window.location.origin);
+      return parsed.origin === collect.origin && parsed.pathname === collect.pathname;
+    } catch (err) {
+      return false;
+    }
+  }
+
+      // Debug RUM 函数：把错误事件上报到 Agent API（仅在 Rush 预览 iframe 中）
+      function __debugRum(event) {
+        if (window.name !== RUSH_PREVIEW_IFRAME_ID || event.type !== 'error') {
+          return;
+        }
+
+        try {
+          fetch(REPORT_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ projectId: PROJECT_ID, event: event })
+          }).catch(function (err) {
+            console.warn('[RUM Debug] Failed to report error:', err);
+          });
+        } catch (err) {
+          console.warn('[RUM Debug] Failed to report error:', err);
+        }
+      }
+
+      function initRum() {
+        if (typeof octopusRum === 'undefined') {
+          console.warn('[RUM] SDK 未加载，跳过初始化');
+          return;
+        }
+
+        octopusRum.init({
+          site: "octopus-ingest-cn.zhenguanyu.com",
+          service: "k79ugfzimkn5",
+          env: 'online',
+          version: "1791629457470",
+          applicationId: "48503620-12f8-499b-949c-a0d11fb29f9c",
+          clientToken: "75d73372c13d4ff09633c2e6a15b6f7b",
+          trackUserInteractions: true,
+          trackResources: true,
+          trackViewsManually: false,
+          beforeSend: function (event) {
+            // 过滤掉指向收集服务的事件，避免循环上报（__rushIsCollectUrl 精确匹配，
+            // 旧版 indexOf 子串匹配可被绕过，见顶部注释）
+            if (
+              event.type === 'resource' &&
+              __rushIsCollectUrl(event.resource && event.resource.url)
+            ) {
+              return false;
+            }
+
+            // 调用 debug 函数上报到 Agent
+            __debugRum(event);
+
+            // 返回 true 继续正常上报到 Octopus
+            return true;
+          }
+        });
+      }
+
+      // 初始化挂在 SDK script 的 load 事件上，而不是 DOMContentLoaded：
+      // defer 脚本按【文档顺序】执行，<head> 里的 SDK 必定早于 <body> 里的用户入口
+      // 脚本，且 load 回调紧跟其执行。这样 RUM 在用户代码跑之前就已就绪，能接住
+      // 加载期抛的错（AI 生成的静态页最典型的错误就出在这里，也是 __debugRum 回传
+      // 给 AI 的那条链路）。换成 DOMContentLoaded 会晚于用户入口脚本，那类错误必然
+      // 漏采；换成 async 则执行时机随网络波动，先后不再有保证。
+      var sdkScript = document.getElementById("octopus-rum-sdk");
+
+      if (typeof octopusRum !== 'undefined') {
+        // SDK 已就绪（如片段被动态插入、defer 被忽略而提前执行完）
+        initRum();
+      } else if (sdkScript) {
+        sdkScript.addEventListener('load', initRum);
+        sdkScript.addEventListener('error', function () {
+          console.warn('[RUM] SDK 加载失败，跳过初始化');
+        });
+      } else {
+        console.warn('[RUM] 未找到 SDK script 标签，跳过初始化');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <!-- 顶部导航 -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-logo">☕</span>
+        <div class="brand-text">
+          <strong>Java 全栈修炼手册</strong>
+          <small>从 0 到全栈工程师 · 保姆级教程</small>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-info"><span id="progressLabel">学习进度 0%</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      </div>
+      <div class="coin-hud" title="学习赚取的金币，可用于召唤收藏品">
+        <span class="coin-hud-icon">🪙</span><span class="coin-hud-num" id="coinCount">0</span>
+      </div>
+      <button class="reset-btn" id="resetBtn" title="清空所有学习记录">↺ 重置</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- 侧边导航 -->
+    <aside class="sidebar" id="sidebar">
+      <nav class="side-nav">
+        <a class="nav-item" data-tab="home" href="#home">
+          <span class="nav-icon">🏠</span><span class="nav-text">首页 · 使用指南</span>
+        </a>
+        <div class="nav-group-title">课程章节</div>
+        <div id="chapterNav"></div>
+        <div class="nav-group-title">知识总览与考查</div>
+        <a class="nav-item" data-tab="topics" href="#topics">
+          <span class="nav-icon">🖼️</span><span class="nav-text">原理与源码专栏（15 篇长文）</span>
+        </a>
+        <a class="nav-item" data-tab="companies" href="#companies">
+          <span class="nav-icon">🏢</span><span class="nav-text">大厂分类真题（9 家 56 问）</span>
+        </a>
+        <a class="nav-item" data-tab="syllabus" href="#syllabus">
+          <span class="nav-icon">📋</span><span class="nav-text">完整知识清单（全量罗列）</span>
+        </a>
+        <a class="nav-item" data-tab="baguwen" href="#baguwen">
+          <span class="nav-icon">💼</span><span class="nav-text">面试八股文（91 问）</span>
+        </a>
+        <a class="nav-item" data-tab="pitfalls" href="#pitfalls">
+          <span class="nav-icon">⚠️</span><span class="nav-text">易错点考场（90 天 180 题）</span>
+        </a>
+        <a class="nav-item" data-tab="exam" href="#exam">
+          <span class="nav-icon">🎓</span><span class="nav-text">模拟考试（9 套卷）</span>
+        </a>
+        <div class="nav-group-title">实战练习</div>
+        <a class="nav-item" data-tab="quiz" href="#quiz">
+          <span class="nav-icon">📝</span><span class="nav-text">章节测验（126 题）</span>
+        </a>
+        <a class="nav-item" data-tab="algo" href="#algo">
+          <span class="nav-icon">⚔️</span><span class="nav-text">刷题训练营（60 题）</span>
+        </a>
+        <a class="nav-item" data-tab="roadmap" href="#roadmap">
+          <span class="nav-icon">🗺️</span><span class="nav-text">一页看懂知识地图</span>
+        </a>
+        <div class="nav-group-title">激励与防坑</div>
+        <a class="nav-item" data-tab="alerts" href="#alerts">
+          <span class="nav-icon">⚡</span><span class="nav-text">易错点提醒（48 条速查+闪卡）</span>
+        </a>
+        <a class="nav-item" data-tab="achievements" href="#achievements">
+          <span class="nav-icon">🏆</span><span class="nav-text">成就勋章</span>
+          <span class="ach-badge" id="achBadge">0</span>
+        </a>
+        <a class="nav-item" data-tab="summon" href="#summon">
+          <span class="nav-icon">🪙</span><span class="nav-text">金币召唤 · 收藏图鉴</span>
+        </a>
+      </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="content" id="content"></main>
+  </div>
+
+  <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="打开目录">☰</button>
+  <div class="mobile-mask" id="mobileMask"></div>
+
+  <script type="module" src="./src/hmr-bridge.js"></script>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

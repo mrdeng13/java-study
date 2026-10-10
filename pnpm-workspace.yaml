@@ -1,0 +1,9 @@
+# pnpm >=11 默认开启两道供应链硬拦截（均 exit 1）：
+# 1) minimumReleaseAge=1440：锁定版本发布不满 24h 拒绝安装（@supabase/*、postcss 等高频发版包极易命中）
+# 2) 未批准构建脚本（esbuild 等 postinstall）直接失败
+# 运行时 online-pod 重放 pnpm install 命中任一策略会导致发布 CrashLoopBackOff（2026-09-04 线上事故）。
+# 此文件显式关闭冷却窗口并放行模板依赖树内的构建脚本；pnpm 10/11/12 三代兼容（10 忽略未知 key）。
+minimumReleaseAge: 0
+allowBuilds:
+  esbuild: true
+  unrs-resolver: true

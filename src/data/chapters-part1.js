@@ -1,0 +1,294 @@
+// 课程内容 第 1-3 章：编程入门 / 计算机基础 / Java SE
+// 块类型: p=段落 h=小标题 list=列表 code=代码 table=表格 tip/warn/info=提示框 qa=思考题 steps=步骤
+
+export const chaptersPart1 = [
+  {
+    id: 'ch1',
+    icon: '🌍',
+    title: '第 1 章 · 编程世界入门',
+    subtitle: '零基础第一课：程序是什么？前后端是什么？全栈工程师是什么？',
+    blocks: [
+      { t: 'p', html: '欢迎来到编程世界！这一章不需要你写任何代码，我们先把最基础的概念讲透。<b>就像学做菜之前先认识厨房</b>——搞清楚"程序、前端、后端、数据库"这些词到底是什么，后面的路才不会懵。' },
+
+      { t: 'h', html: '1.1 什么是程序？—— 把"想法"翻译给计算机听' },
+      { t: 'p', html: '计算机本质上是一台"只会执行指令的机器"，它自己不会思考。<b>程序（Program）就是一份写给计算机的、一步一步的指令清单。</b>' },
+      { t: 'info', html: '🍳 <b>生活类比</b>：程序就像一份"菜谱"。菜谱写着"打鸡蛋 → 加盐 → 下锅翻炒 3 分钟"，程序员写的代码则是"读取用户输入 → 判断密码是否正确 → 正确就跳转首页"。计算机就像一个严格但手速极快的厨师，严格按照菜谱执行，一步都不会跳。' },
+      { t: 'p', html: '因为计算机只认识 0 和 1（二进制），而人类写 0 和 1 太痛苦了，所以天才们发明了<b>编程语言</b>（如 Java、Python、C++），它们更接近人类语言，再由"翻译官"把编程语言翻译成二进制。' },
+      { t: 'p', html: '"翻译官"有两种工作方式，这决定了语言的分类：' },
+      { t: 'table', headers: ['翻译方式', '工作原理', '代表语言', '特点'], rows: [
+        ['编译型', '像"整本书一次性翻译"：先全部翻译成机器码，再运行', 'C、C++、Go', '运行速度快，但每次改代码要重新编译'],
+        ['解释型', '像"同声传译"：边翻译边执行，翻译一行执行一行', 'Python、JavaScript', '灵活方便，但运行相对慢'],
+        ['混合型（先编译后解释）', '先编译成中间码（字节码），再由虚拟机执行', 'Java、C#', '兼顾性能与跨平台，Java 走的就是这条路'],
+      ]},
+
+      { t: 'h', html: '1.2 一个网站/APP 是怎么运作的？—— 餐厅模型' },
+      { t: 'p', html: '你每天刷的淘宝、微信、B站，都是"前端 + 后端 + 数据库"协同工作的结果。我们用一家餐厅来类比：' },
+      { t: 'table', headers: ['餐厅角色', '对应技术', '负责什么'], rows: [
+        ['店面装修、菜单、服务员', '<b>前端</b>（HTML/CSS/JS、Vue/React）', '用户看得见摸得着的界面：按钮、图片、动画、点击交互'],
+        ['后厨', '<b>后端</b>（Java、Spring）', '处理业务逻辑：登录校验、下单扣库存、计算价格'],
+        ['仓库/冷库', '<b>数据库</b>（MySQL、Redis）', '长期保存数据：用户信息、订单记录、商品库存'],
+        ['传菜员', '<b>HTTP 协议 / API</b>', '前后端之间传递数据的"规定格式"：你点单（请求），后厨回菜（响应）'],
+      ]},
+      { t: 'p', html: '一次典型的"登录"流程，完整走一遍：' },
+      { t: 'steps', items: [
+        '你在登录页输入账号密码，点"登录"——这是<b>前端</b>在收集数据；',
+        '前端把账号密码打包成 HTTP 请求，发给服务器——走的是<b>网络 + HTTP 协议</b>；',
+        '服务器上的<b>后端程序</b>（Java 写的）收到请求，取出账号密码；',
+        '后端去<b>数据库</b>里查："有没有这个用户？密码对得上吗？"；',
+        '数据库把查询结果返回给后端；',
+        '后端判断"密码正确"，生成一个登录凭证（Token）返回给前端；',
+        '前端收到成功响应，跳转到首页，把凭证存起来——登录完成！',
+      ]},
+      { t: 'warn', html: '<b>常见误区</b>：很多人以为"点一下按钮，页面变了"就是前端的全部。其实页面上 99% 的动态数据（商品列表、评论、余额）都是前端"派人"（发请求）去后端"仓库"（数据库）取回来的。前端负责"展示"，后端负责"数据和逻辑"。' },
+
+      { t: 'h', html: '1.3 全栈工程师是什么？' },
+      { t: 'p', html: '<b>全栈工程师（Full-Stack Developer）= 前端 + 后端 + 数据库 + 服务器部署，前后端都能独立搞定的人。</b>' },
+      { t: 'list', items: [
+        '<b>前端方向</b>：精通 HTML/CSS/JS + Vue 或 React，做出漂亮的界面；',
+        '<b>后端方向</b>：精通 Java + Spring + MySQL + Redis，写出稳定的服务；',
+        '<b>全栈方向</b>：两边都掌握到"能独立完成项目"的程度，外加 Linux、Docker、Git 等工程能力。',
+      ]},
+      { t: 'tip', html: '全栈的价值不是"每样都最精"，而是<b>打通整条链路</b>：你知道一次点击背后发生了什么，能独立从零做出完整产品——这是创业公司、小团队最稀缺的能力，也是你理解大型系统的基础。' },
+
+      { t: 'h', html: '1.4 为什么选 Java 作为主力语言？' },
+      { t: 'table', headers: ['优势', '说明'], rows: [
+        ['生态最成熟', 'Spring 全家桶、海量开源库，企业级问题基本都有现成方案'],
+        ['岗位需求量大', '国内大厂（阿里、美团、字节等）后端主力语言就是 Java'],
+        ['强类型、工程化', '代码规范严格，适合大团队协作，写错类型编译期就报错'],
+        ['一次编写，到处运行', 'Java 代码编译成字节码，在任何装了 JVM 的系统上都能跑'],
+        ['学习资料最全', '中文教程、书籍、面试资料远多于其他后端语言'],
+      ]},
+      { t: 'p', html: 'Java 的竞争对手：Go（云计算领域火）、Python（AI/脚本强）、Node.js（前端同构）。<b>先精通 Java 一门，其他语言学起来都是一通百通。</b>' },
+
+      { t: 'h', html: '1.5 你的学习路线图（本站目录即路线）' },
+      { t: 'steps', items: [
+        '<b>阶段一 · 地基</b>：计算机基础（第 2 章）—— 网络协议、进程线程，面试必考；',
+        '<b>阶段二 · 主力语言</b>：Java SE（第 3 章）—— 语法、面向对象、集合、多线程、JVM，这是最花时间也最重要的一章；',
+        '<b>阶段三 · 看得见的界面</b>：前端三件套 + Vue（第 4 章）；',
+        '<b>阶段四 · 数据的家</b>：MySQL 数据库（第 5 章）；',
+        '<b>阶段五 · 后端框架</b>：Spring Boot 全家桶（第 6 章）—— 学完就能写真实项目；',
+        '<b>阶段六 · 高级武器</b>：中间件 Redis / 消息队列 / Nginx（第 7 章）—— 大厂面试重点；',
+        '<b>阶段七 · 职业装备</b>：Git / Linux / Docker 工程化（第 8 章）；',
+        '<b>阶段八 · 毕业</b>：全栈实战项目 + 职业路线（第 9 章）。',
+      ]},
+      { t: 'tip', html: '<b>学习节奏建议</b>：零基础全职学习约 6~9 个月可达初级全栈水平。每周至少 70% 时间动手写代码，30% 时间看教程。记住：<b>看会 ≠ 会写，敲完每一行代码才算学会。</b>' },
+      { t: 'qa', q: '零基础真的能学会编程吗？数学不好有影响吗？', a: '完全可以。90% 的业务开发用不到高数，需要的是初中数学的逻辑思维（变量、判断、循环）。编程更接近"学外语"：记语法（单词）、练逻辑（造句）、做项目（写作文）。英语要求也不高，认识几十个常见单词（class、public、return）即可。' },
+      { t: 'qa', q: '先学前端还是先学后端？', a: '以 Java 全栈为目标，推荐<b>先学 Java 后端</b>（第 3 章打牢），再学前端（第 4 章）。原因：后端思维（数据、逻辑、接口）是根，前端页面是壳；且先写后端时用 Postman 测试接口即可看到结果，不依赖前端。前端最后只需要"会用 Vue 调接口"的程度即可入职后端岗，之后在工作中补深。' },
+    ],
+  },
+
+  {
+    id: 'ch2',
+    icon: '💻',
+    title: '第 2 章 · 计算机基础',
+    subtitle: '二进制、内存、进程线程、网络协议——程序员的"物理课"',
+    blocks: [
+      { t: 'p', html: '这一章是很多培训班跳过、但<b>大厂面试必考、工作中天天用</b>的内容。不懂计算机基础，后面学多线程、网络编程、性能优化时全是黑盒。我们用最通俗的方式讲。' },
+
+      { t: 'h', html: '2.1 二进制：计算机的母语' },
+      { t: 'p', html: '计算机用电路的"通电/断电"表示两种状态，对应数字 <b>1 和 0</b>。所有数据——数字、文字、图片、视频——最终都是一串 0 和 1。' },
+      { t: 'table', headers: ['单位', '大小', '直观感受'], rows: [
+        ['bit（位）', '1 个 0 或 1', '最小单位，像一盏灯的开/关'],
+        ['Byte（字节）', '8 bit', '存 1 个英文字母；1 个汉字通常占 2~3 字节'],
+        ['KB', '1024 Byte', '一段纯文本'],
+        ['MB', '1024 KB', '一张手机照片（约 1~5 MB）'],
+        ['GB', '1024 MB', '一部高清电影'],
+      ]},
+      { t: 'p', html: '十进制转二进制用"除 2 取余"法。例如 13：13÷2=6 余 1，6÷2=3 余 0，3÷2=1 余 1，1÷2=0 余 1 → 倒着读余数得 <b>1101</b>。' },
+      { t: 'code', lang: 'java', title: 'Java 里的进制写法', code: 'int a = 13;      // 十进制\nint b = 0b1101;  // 二进制写法，值也是 13\nint c = 0x0D;    // 十六进制写法，值也是 13\nSystem.out.println(Integer.toBinaryString(13)); // 输出 1101' },
+
+      { t: 'h', html: '2.2 计算机三大硬件：CPU、内存、硬盘' },
+      { t: 'table', headers: ['硬件', '作用', '类比', '速度/特点'], rows: [
+        ['CPU（处理器）', '执行计算和指令', '厨师本人', '速度极快，但只会算，不存东西'],
+        ['内存（RAM）', '临时存放正在运行的程序和数据', '灶台/操作台', '速度快，断电数据全丢，容量小（16~32G）'],
+        ['硬盘（SSD/HDD）', '长期存放文件', '仓库/冰箱', '容量大（512G+），断电不丢，速度慢于内存'],
+      ]},
+      { t: 'info', html: '<b>关键理解</b>：程序存在硬盘上（比如 IDEA 安装包），双击运行后被加载进内存，CPU 从内存读取指令来执行。所以"内存不够 → 程序跑不动"，"硬盘太小 → 装不下东西"。后端调优常说的"缓存"就是把数据从慢的地方（数据库/硬盘）搬到快的地方（内存/Redis）。' },
+
+      { t: 'h', html: '2.3 进程与线程 —— 面试必考' },
+      { t: 'p', html: '<b>进程（Process）</b>：一个正在运行的程序，是操作系统分配资源的最小单位。打开微信是一个进程，打开 IDEA 又是一个进程，各自独立、内存隔离。' },
+      { t: 'p', html: '<b>线程（Thread）</b>：进程内部的执行单元，是 CPU 调度的最小单位。一个进程至少有一个线程（主线程），也可以开多个线程同时干活。' },
+      { t: 'info', html: '🏭 <b>类比</b>：进程 = 一家工厂（有独立厂房和原料）；线程 = 工厂里的工人。多个工人（线程）共享同一厂房的原料（进程内存），所以协作快、通信容易，但也可能抢同一份原料（线程安全问题）。一个工厂倒闭不影响另一家（进程隔离），但厂里的捣乱工人会影响全厂（线程崩溃可能拖垮进程）。' },
+      { t: 'table', headers: ['对比项', '进程', '线程'], rows: [
+        ['内存空间', '独立、互相隔离', '共享所在进程的内存'],
+        ['崩溃影响', '一个进程崩溃不影响其他进程', '线程异常可能导致整个进程挂掉'],
+        ['切换开销', '大', '小（所以"并发"多用线程）'],
+        ['通信方式', '需要 IPC（管道、Socket 等），复杂', '直接读写共享变量，简单但要注意安全'],
+      ]},
+      { t: 'p', html: '你电脑上同时开几十个软件不卡，是因为 CPU 把时间切成极小的片（时间片轮转），在几千个线程间飞快切换——宏观上"并行"，微观上轮流执行，这叫<b>并发</b>。' },
+
+      { t: 'h', html: '2.4 网络三要素：IP、端口、协议' },
+      { t: 'list', items: [
+        '<b>IP 地址</b>：设备在网络中的"门牌号"，如 192.168.1.100。有了 IP，数据才知道送到哪台机器；',
+        '<b>端口号（Port）</b>：一台机器上的"房间号"（0~65535）。同一台电脑上微信、IDEA、MySQL 都在收发数据，靠端口区分：MySQL 默认 3306、Redis 默认 6379、HTTP 默认 80、HTTPS 默认 443；',
+        '<b>协议</b>：双方约定的"通信规则"。就像寄快递要按统一格式写地址，网络传输数据也按统一格式打包。',
+      ]},
+
+      { t: 'h', html: '2.5 TCP / UDP / HTTP，一张图分清' },
+      { t: 'p', html: '网络协议是分层的，你只需要先记住三层：<b>IP 层负责寻址（送到哪台机器）→ TCP/UDP 层负责可靠传输（怎么送）→ HTTP 层负责应用语义（送什么内容）</b>。' },
+      { t: 'table', headers: ['协议', '特点', '类比', '使用场景'], rows: [
+        ['TCP', '面向连接、可靠、不丢不乱（三次握手建立连接）', '打电话：先"喂？听得见吗？"确认通了再说事', '网页、文件传输、数据库连接——几乎所有重要业务'],
+        ['UDP', '无连接、快、可能丢包', '寄明信片/广播喊话：扔出去就不管', '视频直播、游戏、语音——丢一两帧没关系，要的就是快'],
+        ['HTTP', '基于 TCP 的应用层协议，规定请求/响应格式', '点餐单：规定格式地"下单"和"上菜"', '浏览器访问网站、APP 调接口、前后端交互'],
+      ]},
+      { t: 'info', html: '<b>三次握手</b>（面试高频）：TCP 建立连接时——① 客户端发"我想连你"（SYN）→ ② 服务端回"好的，我也准备好了"（SYN+ACK）→ ③ 客户端再说"收到，开始吧"（ACK）。三次的目的是<b>双方都确认"我能发、你能收，你也能发、我也能收"</b>。' },
+
+      { t: 'h', html: '2.6 HTTP 协议详解 —— 后端面试重灾区' },
+      { t: 'p', html: 'HTTP 是"请求-响应"模型：客户端发一个请求（Request），服务器回一个响应（Response），一问一答，完事就断（HTTP/1.1 可复用连接）。' },
+      { t: 'code', lang: 'text', title: '一次真实的 HTTP 请求报文', code: 'GET /api/users/1 HTTP/1.1        ← 请求行：方法 + 路径 + 协议版本\nHost: example.com                ← 请求头（一堆元信息）\nUser-Agent: Mozilla/5.0 ...\nContent-Type: application/json\nAuthorization: Bearer eyJhbGc...  ← 登录凭证就放这里\n\n（GET 请求没有请求体；POST 的参数放在这里）' },
+      { t: 'code', lang: 'text', title: '服务器返回的 HTTP 响应报文', code: 'HTTP/1.1 200 OK                  ← 状态行：状态码 + 描述\nContent-Type: application/json\n\n{"id":1, "name":"张三", "age":25}  ← 响应体（真正要的数据）' },
+      { t: 'p', html: '<b>常用请求方法</b>（RESTful 风格第 6 章细讲）：' },
+      { t: 'table', headers: ['方法', '含义', '例子'], rows: [
+        ['GET', '查询数据', 'GET /api/users/1 → 查 1 号用户'],
+        ['POST', '新建数据', 'POST /api/users → 创建用户'],
+        ['PUT', '完整更新', 'PUT /api/users/1 → 全量修改 1 号用户'],
+        ['DELETE', '删除数据', 'DELETE /api/users/1 → 删除 1 号用户'],
+      ]},
+      { t: 'p', html: '<b>状态码</b>——服务器给你的"回执"，必须认识这几类：' },
+      { t: 'table', headers: ['状态码', '含义', '你遇到的场景'], rows: [
+        ['200', '成功', '接口正常返回数据'],
+        ['301/302', '重定向', '访问旧网址自动跳新网址'],
+        ['404', '资源不存在', '网址打错了，或接口路径写错'],
+        ['401 / 403', '未登录 / 没权限', 'Token 过期、访问别人的数据'],
+        ['500', '服务器内部错误', '后端代码抛异常了，去看服务端日志'],
+        ['502 / 504', '网关错误 / 超时', '后端服务挂了或处理太慢'],
+      ]},
+      { t: 'tip', html: '<b>调试技巧</b>：浏览器按 F12 打开开发者工具 → Network 标签，能看到页面发出的每一个请求：URL、参数、状态码、响应内容。排查"页面数据不对"的问题，第一件事就是看这里——<b>前端 60% 的 bug 都能靠 F12 定位</b>。' },
+      { t: 'qa', q: '在浏览器输入 www.example.com 按回车，到页面显示，中间发生了什么？（经典面试题）', a: '简化版完整链路：① 浏览器查 DNS，把域名解析成服务器 IP（先查本地缓存 → 运营商 DNS → 根域名服务器）；② 浏览器与该 IP 的服务器建立 TCP 连接（三次握手），HTTPS 还要再加 TLS 握手交换证书密钥；③ 浏览器发送 HTTP 请求；④ 服务器（通常前面有 Nginx 反向代理）把请求转给后端应用，后端查数据库后返回数据；⑤ 服务器回 HTTP 响应；⑥ 浏览器解析 HTML，边解析边下载 CSS/JS/图片，渲染出页面；⑦ TCP 四次挥手断开连接。' },
+      { t: 'qa', q: 'HTTP 和 HTTPS 的区别？', a: 'HTTPS = HTTP + 加密（TLS/SSL）。HTTP 明文传输，像寄明信片，路上谁都能看；HTTPS 像密封挂号信，内容加密且能验证服务器身份（证书）。HTTPS 默认端口 443，现在所有正经网站都必须用。实现上靠"非对称加密交换密钥 + 对称加密传输数据"。' },
+    ],
+  },
+
+  {
+    id: 'ch3',
+    icon: '☕',
+    title: '第 3 章 · Java SE 核心',
+    subtitle: '最长也最重要的一章：从 Hello World 到多线程与 JVM',
+    blocks: [
+      { t: 'p', html: '这一章是全栈之路的<b>地基中的地基</b>，会花掉你 1.5~2 个月时间，非常值得。每一节都给出最小可运行代码，<b>请逐行敲进 IDEA 运行</b>，不要复制粘贴。' },
+
+      { t: 'h', html: '3.1 搭建环境：JDK、IDEA 与第一个程序' },
+      { t: 'p', html: '<b>概念先分清</b>：' },
+      { t: 'list', items: [
+        '<b>JVM</b>（Java Virtual Machine）：虚拟机，负责执行字节码，是"一次编写到处运行"的关键；',
+        '<b>JRE</b>（Java Runtime Environment）= JVM + 核心类库，运行 Java 程序够用；',
+        '<b>JDK</b>（Java Development Kit）= JRE + 编译器 javac + 调试工具，<b>开发者装这个</b>。',
+      ]},
+      { t: 'steps', items: [
+        '下载 <b>JDK 17</b>（LTS 长期支持版，企业主流）——推荐从 Adoptium 官网或华为镜像下载；',
+        '安装时一路下一步；完成后打开终端输入 <code>java -version</code>，能看到版本号即成功；',
+        '下载 <b>IntelliJ IDEA Community 版</b>（免费），这是 Java 最主流的开发工具；',
+        'IDEA 新建项目 → 选择 JDK 17 → 创建 <code>Main.java</code>，敲下第一个程序。',
+      ]},
+      { t: 'code', lang: 'java', title: '第一个 Java 程序：HelloWorld.java', code: 'public class HelloWorld {          // 文件名必须叫 HelloWorld.java\n    public static void main(String[] args) {   // 程序入口，固定写法\n        System.out.println("Hello, World!");       // 打印一行字\n    }\n}' },
+      { t: 'p', html: '逐行拆解（新手必须理解）：' },
+      { t: 'list', items: [
+        '<code>public class HelloWorld</code>：定义一个"类"叫 HelloWorld，Java 所有代码都必须写在类里；',
+        '<code>public static void main(String[] args)</code>：main 方法是程序入口，JVM 从这里开始执行。现在先背下来，第 3.5 节后你会理解每个词；',
+        '<code>System.out.println(...)</code>：打印括号里的内容并换行；',
+        '<b>每条语句以分号 ; 结尾</b>，大括号 {} 表示代码块——忘记分号是新手第一大错误。',
+      ]},
+
+      { t: 'h', html: '3.2 变量与数据类型' },
+      { t: 'p', html: '变量就是"给数据起个名字、在内存里占个位置"。Java 是<b>强类型语言</b>：每个变量必须声明类型，类型定了就不能装别的类型。' },
+      { t: 'code', lang: 'java', title: '八大基本类型 + 字符串', code: 'int age = 25;              // 整数（最常用）4字节\nlong bigNum = 8_000_000_000L;  // 长整数，注意加 L\ndouble price = 9.99;       // 小数（最常用）\nfloat f = 1.5f;            // 单精度小数，加 f（少用）\nboolean isVip = true;      // 布尔：true / false\nchar grade = \'A\';          // 单个字符，单引号\nbyte b = 127;              // -128~127 的小整数\nshort s = 3000;            // 短整数\n\nString name = "张三";       // 字符串！注意 String 是引用类型，双引号\nfinal int MAX = 100;       // final 修饰 = 常量，不可再改' },
+      { t: 'warn', html: '<b>经典陷阱</b>：<code>0.1 + 0.2 == 0.3</code> 在计算机里是 false！因为二进制无法精确表示某些小数。涉及金额计算<b>必须用 BigDecimal 类</b>，这是金融类项目的基本功。' },
+
+      { t: 'h', html: '3.3 运算符与类型转换' },
+      { t: 'code', lang: 'java', title: '常用运算符速览', code: 'int a = 10, b = 3;\nSystem.out.println(a / b);    // 3  ← 整数除法直接舍弃小数！\nSystem.out.println(a % b);    // 1  取余（判断奇偶：n % 2）\nSystem.out.println(a * 1.0 / b); // 3.33 想要小数，先乘 1.0\n\n// 比较 & 逻辑\nboolean r1 = (a > b) && (b > 0);  // && 短路与：左边 false 就不算右边\nboolean r2 = (a < b) || (b > 0);  // || 短路或：左边 true 就不算右边\n\n// 自增\nint i = 5;\nSystem.out.println(i++);   // 输出 5（先用在后加）\nSystem.out.println(++i);   // 输出 7（先加在后用）' },
+
+      { t: 'h', html: '3.4 流程控制：if / switch / for / while' },
+      { t: 'code', lang: 'java', title: '判断与循环的全部套路', code: '// if-else\nint score = 85;\nif (score >= 90) {\n    System.out.println("优秀");\n} else if (score >= 60) {\n    System.out.println("及格");\n} else {\n    System.out.println("不及格");\n}\n\n// for 循环：打印 1~100 的和\nint sum = 0;\nfor (int i = 1; i <= 100; i++) {\n    sum += i;\n}\nSystem.out.println("1到100的和 = " + sum);  // 5050\n\n// 增强 for（遍历数组/集合专用）\nint[] nums = {10, 20, 30};\nfor (int n : nums) {\n    System.out.println(n);\n}\n\n// while / break / continue\nint count = 0;\nwhile (true) {\n    count++;\n    if (count >= 5) break;      // 跳出整个循环\n    if (count == 2) continue;   // 跳过本次，进入下一次\n    System.out.println(count);  // 输出 1 3 4\n}' },
+      { t: 'tip', html: '<b>新手必做练习</b>（学完本节就能写）：① 打印九九乘法表（双层 for）；② 判断 101~200 之间有多少个素数；③ 猜数字游戏（随机数 + while + if）。能独立写出这三个，说明流程控制过关。' },
+
+      { t: 'h', html: '3.5 方法（函数）：把代码打包复用' },
+      { t: 'code', lang: 'java', title: '方法的定义与调用', code: 'public class Calculator {\n\n    // 方法定义：修饰符 返回值类型 方法名(参数列表)\n    public static int add(int x, int y) {\n        return x + y;              // return 返回结果并结束方法\n    }\n\n    // 无返回值用 void\n    public static void printLine() {\n        System.out.println("----------");\n    }\n\n    // 方法重载 Overload：同名不同参，编译器按参数自动选择\n    public static double add(double x, double y) {\n        return x + y;\n    }\n\n    public static void main(String[] args) {\n        int s = add(3, 5);       // 调用方法，s = 8\n        printLine();\n        System.out.println(add(1.5, 2.5));  // 走 double 版本，4.0\n    }\n}' },
+
+      { t: 'h', html: '3.6 数组：一排同类型的格子' },
+      { t: 'code', lang: 'java', title: '数组操作全集', code: '// 声明并初始化\nint[] arr = {3, 1, 4, 1, 5};\nint[] arr2 = new int[10];      // 长度 10，默认全是 0\n\nSystem.out.println(arr.length);   // 长度 5（注意是属性不是方法）\nSystem.out.println(arr[0]);       // 第一个元素 3（下标从 0 开始！）\narr[1] = 100;                     // 修改第二个元素\n\n// 遍历求最大值\nint max = arr[0];\nfor (int i = 1; i < arr.length; i++) {\n    if (arr[i] > max) max = arr[i];\n}\nSystem.out.println("最大值: " + max);   // 100\n\n// 排序（面试常让你手写，工作直接用工具类）\njava.util.Arrays.sort(arr);\nSystem.out.println(java.util.Arrays.toString(arr)); // [1, 1, 3, 4, 5]' },
+      { t: 'warn', html: '<b>数组下标越界</b>（ArrayIndexOutOfBoundsException）是新手最常见的异常：长度为 5 的数组，下标只有 0~4，访问 arr[5] 直接报错。写循环时牢记 <code>i < arr.length</code> 而不是 <code><=</code>。' },
+
+      { t: 'h', html: '3.7 面向对象（OOP）—— Java 的灵魂' },
+      { t: 'p', html: '前面学的叫"面向过程"：一件事一步接一步地做。面向对象则是<b>先把事物抽象成"类"，再让对象们协作</b>。这是思维方式的升级，务必吃透。' },
+      { t: 'info', html: '🐕 <b>类比</b>：类（Class）= 图纸/模具，对象（Object）= 按图纸造出来的实物。"狗"这个概念有"名字、年龄"属性和"叫、跑"行为——这是类；你家的"旺财"2 岁会叫——这是对象。' },
+      { t: 'code', lang: 'java', title: '类的完整写法：属性 + 方法 + 构造器 + 封装', code: 'public class Dog {\n    // 1. 属性（成员变量）—— private 封装，不让外部直接改\n    private String name;\n    private int age;\n\n    // 2. 构造方法：new 的时候自动调用，用于初始化\n    public Dog(String name, int age) {\n        this.name = name;    // this.name 是属性，name 是参数\n        this.age = age;\n    }\n\n    // 3. getter/setter：外部通过这两个方法安全地读/写属性\n    public String getName() { return name; }\n    public void setAge(int age) {\n        if (age < 0) age = 0;          // 封装的价值：可以加校验！\n        this.age = age;\n    }\n\n    // 4. 行为（方法）\n    public void bark() {\n        System.out.println(name + "：汪汪！");\n    }\n}\n\n// 另一个文件里使用：\n// Dog d = new Dog("旺财", 2);   ← new 创建对象\n// d.bark();                    ← 输出：旺财：汪汪！' },
+      { t: 'p', html: '<b>三大特性</b>，面试必背 + 必须能举例子：' },
+      { t: 'table', headers: ['特性', '一句话', '解决什么问题'], rows: [
+        ['封装', '属性私有 private，通过 getter/setter 访问', '保护数据不被乱改，可以在方法里加校验逻辑'],
+        ['继承', '子类 extends 父类，自动拥有父类的属性和方法', '代码复用。"猫、狗都是动物"，公共代码写在 Animal 里'],
+        ['多态', '父类引用指向子类对象，调用方法时执行子类的实现', '同一句代码，不同对象有不同行为，程序可扩展'],
+      ]},
+      { t: 'code', lang: 'java', title: '继承 + 多态：面试最爱考的代码', code: 'public class Animal {\n    public void makeSound() {\n        System.out.println("动物在叫");\n    }\n}\n\npublic class Dog extends Animal {          // Dog 继承 Animal\n    @Override                              // 注解：标记重写父类方法\n    public void makeSound() {\n        System.out.println("汪汪！");\n    }\n}\n\npublic class Cat extends Animal {\n    @Override\n    public void makeSound() {\n        System.out.println("喵喵！");\n    }\n}\n\n// 多态的魔力：同一个变量，不同行为\nAnimal a1 = new Dog();\nAnimal a2 = new Cat();\na1.makeSound();   // 汪汪！ ← 实际执行的是 Dog 的方法\na2.makeSound();   // 喵喵！' },
+      { t: 'p', html: '<b>抽象类与接口</b>：当父类的方法不需要有默认实现、只规定"子类必须会做什么"时，用抽象类或接口。' },
+      { t: 'code', lang: 'java', title: '接口 interface：只定规矩，不管实现', code: '// 接口 = 一份"能力合同"。谁实现它，谁就必须做到这些方法\npublic interface Flyable {\n    void fly();                       // 接口方法默认 public abstract\n}\n\npublic interface Swimmable {\n    void swim();\n}\n\n// 鸭子同时具备两种能力 → Java 类只能单继承，但可以实现多个接口\npublic class Duck extends Animal implements Flyable, Swimmable {\n    @Override public void fly()  { System.out.println("鸭子扑腾着飞"); }\n    @Override public void swim() { System.out.println("鸭子游泳"); }\n}' },
+      { t: 'tip', html: '<b>抽象类 vs 接口怎么选</b>：抽象类（abstract class）描述"是什么"，抽取公共实现，如所有动物都有名字；接口描述"能做什么"，如会飞、会游泳。Java 8 后接口可以有 default 默认方法，但核心区别仍是"单继承多实现"。' },
+
+      { t: 'h', html: '3.8 常用 API：String、包装类与工具类' },
+      { t: 'code', lang: 'java', title: 'String 高频方法（必须熟练）', code: 'String s = "Hello Java";\ns.length();               // 10 长度\ns.charAt(0);              // \'H\' 取第 i 个字符\ns.indexOf("Java");        // 6 查找位置，找不到返回 -1\ns.substring(6);           // "Java" 截取\ns.toUpperCase();          // "HELLO JAVA"\ns.equals("hello java");   // false 比较内容必须用 equals！\ns.equalsIgnoreCase("hello java");  // true 忽略大小写比较\ns.replace("Java", "World");       // "Hello World"\nString[] parts = "a,b,c".split(",");  // 按逗号切开成数组\n\nString s2 = new String("Hello Java");\nSystem.out.println(s == s2);        // false！== 比较的是内存地址\nSystem.out.println(s.equals(s2));   // true  比较内容用 equals' },
+      { t: 'warn', html: '<b>面试必考：== 与 equals 的区别</b>：== 比较两个变量是否指向同一块内存（地址）；equals 默认也是比地址，但 String 等类重写了它变成比内容。<b>字符串比较永远用 equals</b>，笔试题出 == 比较字符串，答案几乎都是 false。另外 String 是不可变的（immutable），频繁拼接字符串要用 StringBuilder。' },
+      { t: 'code', lang: 'java', title: '包装类与自动装箱', code: '// 八大基本类型都有对应的"包装类"（对象版）\n// int→Integer, long→Long, double→Double, boolean→Boolean ...\nInteger num = 10;        // 自动装箱：基本类型自动变对象\nint n = num;             // 自动拆箱\n\n// 为什么需要包装类？集合只能装对象；还有实用方法：\nint x = Integer.parseInt("123");       // 字符串转数字（超常用）\nString bin = Integer.toBinaryString(13);  // 转 "1101"\nInteger max = Integer.MAX_VALUE;       // int 最大值 2147483647\n\n// 经典面试题：Integer 缓存\nInteger a = 127, b = 127;\nInteger c = 128, d = 128;\nSystem.out.println(a == b);  // true  -128~127 有缓存，同一个对象\nSystem.out.println(c == d);  // false 超出缓存，new 了新对象' },
+
+      { t: 'h', html: '3.9 集合框架 —— 实际工作中用得最多的部分' },
+      { t: 'p', html: '数组长度固定、功能简陋，<b>实际开发 90% 的场景用集合</b>。集合是一个"会自动扩容的、功能丰富的容器家族"。' },
+      { t: 'code', lang: 'java', title: 'ArrayList：最常用的列表', code: 'import java.util.ArrayList;\nimport java.util.List;\n\nList<String> names = new ArrayList<>();   // 尖括号里是元素类型（泛型）\nnames.add("张三");         // 尾部添加\nnames.add("李四");\nnames.add(0, "王五");      // 指定位置插入\nnames.get(0);              // 王五，按下标取\nnames.size();              // 3 元素个数\nnames.remove("李四");      // 删除\nnames.contains("张三");    // true 是否包含\n\n// 遍历方式一：增强 for\nfor (String name : names) { System.out.println(name); }\n\n// 遍历方式二：Stream 流（Java 8+，后端开发必备风格）\nnames.stream()\n     .filter(n -> n.startsWith("张"))   // 过滤\n     .forEach(System.out::println);      // 打印：张三' },
+      { t: 'code', lang: 'java', title: 'HashMap：最常用的键值对映射', code: 'import java.util.HashMap;\nimport java.util.Map;\n\nMap<String, Integer> ages = new HashMap<>();\nages.put("张三", 25);       // 存：key 唯一，value 可重复\nages.put("李四", 30);\nages.put("张三", 26);       // 同 key 再 put = 覆盖旧值\nages.get("张三");           // 26 取\nages.get("王五");           // null 取不存在的 key 不报错，返回 null\nages.containsKey("李四");   // true\nages.remove("李四");\nages.size();                // 1\n\n// 遍历（标准写法 entrySet）\nfor (Map.Entry<String, Integer> e : ages.entrySet()) {\n    System.out.println(e.getKey() + " = " + e.getValue());\n}' },
+      { t: 'table', headers: ['集合', '特点', '使用场景'], rows: [
+        ['ArrayList', '数组实现，查询快（下标直达），中间增删慢', '按顺序存一堆东西，最常用，默认选它'],
+        ['LinkedList', '链表实现，增删快，查询慢，还可用作队列/栈', '频繁在头尾增删的场景（实际用得少）'],
+        ['HashSet', '元素不重复、无序，查找极快', '去重，如"统计访问过的 IP"'],
+        ['HashMap', 'key-value 映射，存取极快（哈希表）', '通过唯一 key 找值，如"ID→用户"、"词→次数"'],
+        ['TreeMap', 'key 自动排序的 Map', '需要按 key 顺序输出的场景'],
+      ]},
+      { t: 'warn', html: '<b>面试高频：HashMap 底层原理（简版）</b>：JDK8 中 HashMap = 数组 + 链表 + 红黑树。put 时对 key 调 hashCode() 算出数组下标；两个不同的 key 可能落同一格（哈希冲突），就在该格拉链表；链表长度超 8 且数组长度 ≥64 时链表转红黑树，查询从 O(n) 加速到 O(log n)。数组默认容量 16，元素数超过 容量×0.75（负载因子）时扩容为 2 倍。' },
+
+      { t: 'h', html: '3.10 异常处理：程序出错时的"安全网"' },
+      { t: 'code', lang: 'java', title: 'try-catch-finally 标准写法', code: 'public class ExceptionDemo {\n    public static void main(String[] args) {\n        try {\n            int result = 10 / 0;                    // 这里会抛 ArithmeticException\n            System.out.println("这行不会执行");\n        } catch (ArithmeticException e) {\n            // 捕获特定异常，程序不会崩，还能拿到错误信息\n            System.out.println("出错了: " + e.getMessage());  // / by zero\n        } catch (Exception e) {\n            // 兜底捕获（父类放后面）\n            e.printStackTrace();                    // 打印完整堆栈，排查问题必看\n        } finally {\n            // 无论是否异常都会执行：适合关闭资源\n            System.out.println("处理结束");\n        }\n    }\n}' },
+      { t: 'table', headers: ['异常分类', '代表', '处理要求'], rows: [
+        ['编译时异常（Checked）', 'IOException、SQLException', '编译器强制你 try-catch 或 throws 声明'],
+        ['运行时异常（Unchecked）', 'NullPointerException、数组越界、除零', '不强制处理，靠写代码避免（空指针是第一大高频异常）'],
+        ['错误 Error', 'OutOfMemoryError、StackOverflowError', '程序无法处理，通常是代码或配置有严重问题'],
+      ]},
+      { t: 'tip', html: '<b>自定义异常 + 异常链</b>是业务开发的日常：定义 <code>class BizException extends RuntimeException</code> 表示业务错误（如"余额不足"），在 Spring 里配合全局异常处理器统一返回给前端友好提示——第 6 章实战会用到。' },
+
+      { t: 'h', html: '3.11 泛型：类型安全的容器' },
+      { t: 'code', lang: 'java', title: '泛型类与方法', code: '// 泛型 = "类型参数化"。E 是占位符，使用时才确定具体类型\npublic class Box<E> {\n    private E content;\n    public void set(E content) { this.content = content; }\n    public E get() { return content; }\n}\n\nBox<String> sBox = new Box<>();   // 这个盒子只能装 String\nsBox.set("hello");\n// sBox.set(123);                 // 编译直接报错！错误提前到编译期\n\nBox<Integer> iBox = new Box<>();  // 这个只能装 Integer\niBox.set(42);\n\n// 没有泛型的世界（远古写法）：什么都能装，取出来全是 Object，\n// 强转出错要等到运行时才爆炸 → 泛型的价值就是编译期类型安全' },
+
+      { t: 'h', html: '3.12 IO 流与文件操作' },
+      { t: 'code', lang: 'java', title: '读文件 / 写文件（Java 7+ 推荐写法）', code: 'import java.nio.file.*;\nimport java.util.List;\n\n// 写文件\nFiles.writeString(Path.of("demo.txt"), "你好，Java IO！");\n\n// 一次读全部\nString content = Files.readString(Path.of("demo.txt"));\n\n// 按行读取大文件\nList<String> lines = Files.readAllLines(Path.of("demo.txt"));\nfor (String line : lines) System.out.println(line);\n\n// 传统流写法（理解即可，注意必须 close，try-with-resources 自动关闭）\ntry (var reader = Files.newBufferedReader(Path.of("demo.txt"))) {\n    String line;\n    while ((line = reader.readLine()) != null) {\n        System.out.println(line);\n    }\n}  // 不用手写 reader.close()' },
+
+      { t: 'h', html: '3.13 多线程与并发 —— 进阶面试核心' },
+      { t: 'p', html: '前面 2.3 节讲过进程线程的概念，这里看 Java 怎么用。简单说：<b>多线程 = 让程序同时干几件事</b>（如一边处理用户请求一边打日志），是高并发服务的根基。' },
+      { t: 'code', lang: 'java', title: '创建线程的三种方式', code: '// 方式一：继承 Thread\nclass MyThread extends Thread {\n    @Override\n    public void run() {                    // 线程要干的事写在 run 里\n        System.out.println("线程一在干活: " + Thread.currentThread().getName());\n    }\n}\n\n// 方式二：实现 Runnable（推荐，不影响继承其他类）\nclass MyTask implements Runnable {\n    @Override\n    public void run() { System.out.println("线程二在干活"); }\n}\n\n// 方式三：线程池（工作中唯一正确姿势！）\nimport java.util.concurrent.*;\nExecutorService pool = Executors.newFixedThreadPool(4);  // 4 个常驻工人\npool.submit(() -> System.out.println("任务1"));           // lambda 提交任务\npool.submit(() -> System.out.println("任务2"));\npool.shutdown();                                          // 用完关闭\n\nnew MyThread().start();        // 注意：是 start() 不是 run()！\nnew Thread(new MyTask()).start();' },
+      { t: 'warn', html: '<b>为什么必须用线程池</b>：线程的创建销毁开销大；无限 new 线程会把内存压垮。线程池复用线程、控制并发数量、提供任务队列——就像公司常驻员工处理源源不断的需求单，而不是来一个需求招一个人。' },
+      { t: 'code', lang: 'java', title: '线程安全：经典卖票问题与 synchronized', code: 'public class TicketDemo {\n    static int tickets = 100;                       // 共享变量\n\n    public static void main(String[] args) {\n        Runnable sell = () -> {\n            while (tickets > 0) {\n                synchronized (TicketDemo.class) {   // 加锁：同一时刻只有一个线程能进来\n                    if (tickets > 0) {\n                        try { Thread.sleep(10); } catch (InterruptedException e) {}\n                        tickets--;\n                        System.out.println(Thread.currentThread().getName()\n                                + " 卖出一张，剩 " + tickets);\n                    }\n                }\n            }\n        };\n        new Thread(sell, "窗口A").start();\n        new Thread(sell, "窗口B").start();\n    }\n}\n// 如果去掉 synchronized：两个窗口同时读到 tickets=1，都卖出去，\n// 结果出现负数 —— 这就是"线程安全问题"（竞态条件）。' },
+      { t: 'list', items: [
+        '<b>synchronized</b>：JVM 内置锁，同一时刻只允许一个线程访问被保护的代码；',
+        '<b>volatile</b>：保证变量的修改对所有线程立即可见（不保证原子性）；',
+        '<b>AtomicInteger 等原子类</b>：无锁实现 i++ 这类操作，性能好；',
+        '<b>Lock（如 ReentrantLock）</b>：手动加锁/解锁，比 synchronized 更灵活；',
+        '<b>线程本地 ThreadLocal</b>：每个线程一份自己的变量副本，互不干扰。',
+      ]},
+
+      { t: 'h', html: '3.14 JVM 入门：内存区域与垃圾回收 —— 大厂面试必考' },
+      { t: 'p', html: 'Java 程序跑在 JVM 上，了解 JVM 才能排查内存溢出、性能调优。先记最核心的内存分区：' },
+      { t: 'table', headers: ['内存区域', '存什么', '线程私有？', '会溢出吗'], rows: [
+        ['堆（Heap）', '所有 new 出来的对象（占内存最大）', '共享', '会：OutOfMemoryError'],
+        ['虚拟机栈', '方法的局部变量、方法调用栈帧', '私有', '会：StackOverflowError（如无限递归）'],
+        ['方法区/元空间', '类信息、常量、静态变量', '共享', '会（加载类过多时）'],
+        ['程序计数器', '当前线程执行到哪行字节码', '私有', '唯一不会溢出的区域'],
+      ]},
+      { t: 'p', html: '<b>垃圾回收（GC）</b>：C++ 要程序员手动 free 内存，Java 不用——JVM 自动回收"没人引用的对象"。核心机制：' },
+      { t: 'list', items: [
+        '堆分<b>新生代</b>（Eden + 两个 Survivor 区）和<b>老年代</b>；对象优先在 Eden 出生，熬过一轮轮 GC 后晋升老年代；',
+        '判断对象该死的标准：从根对象（静态变量、栈中变量等）出发，<b>沿着引用链找不到它</b>（可达性分析），它就是垃圾；',
+        'Minor GC 清新生代（频繁、快），Full GC 清整个堆（慢、会造成卡顿，要尽量少发生）；',
+        '常见收集器：CMS（已淘汰）、<b>G1</b>（JDK9+ 默认，分区域回收）、ZGC（超大堆低延迟）；',
+        '调优本质：控制 GC 频率和单次停顿时间，参数如 <code>-Xms/-Xmx</code>（初始/最大堆大小）。',
+      ]},
+      { t: 'info', html: '<b>类比</b>：堆像一个大仓库，GC 像仓库管理员定期盘点——把"没有主人认领的货物"扔掉。新生代是"新货暂存区"（周转快，勤清理），老年代是"长期仓储区"（常驻货物，偶尔大清理）。Full GC 相当于全仓大盘点，期间工人要停下手里的活（Stop The World），所以越少越好。' },
+      { t: 'qa', q: 'String、StringBuilder、StringBuffer 的区别？', a: 'String 不可变，每次拼接都会产生新对象，循环拼接 1 万次就是 1 万个对象，性能极差。StringBuilder 可变、拼接高效，但线程不安全——单线程字符串拼接（绝大多数场景）用它。StringBuffer 功能同 StringBuilder 但方法加了 synchronized，线程安全、性能略低。口诀：默认 StringBuilder，多线程共享才 StringBuffer。' },
+      { t: 'qa', q: '什么是 NullPointerException（NPE）？怎么避免？', a: '对值为 null 的引用调用方法或访问属性就会抛 NPE，如 String s = null; s.length()。它是线上事故最常见原因。预防手段：① 返回集合时返回空集合而非 null；② 使用前判空 if (s != null)；③ 用 Objects.requireNonNull 提前校验；④ Java 8 Optional 链式判空；⑤ 接口层做参数校验（Spring 的 @Valid）。' },
+      { t: 'qa', q: '方法重载（Overload）和重写（Override）的区别？', a: '重载：同一个类里方法名相同、参数列表不同（类型/个数/顺序），是"水平关系"，编译期确定调谁。重写：子类重新实现父类已有的方法，方法签名必须相同，是"垂直关系"，运行期根据实际对象类型决定调谁（多态的根基）。记忆：重载看参数，重写看对象。' },
+    ],
+  },
+];

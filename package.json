@@ -1,0 +1,20 @@
+{
+  "name": "Java全栈保姆级教程",
+  "type": "module",
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --host --port 8000",
+    "build": "vite build",
+    "export-data": "python scripts/export_static_data.py",
+    "publish": "node scripts/publish.js"
+  },
+  "devDependencies": {
+    "vite": "^5.4.2"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "^4.52.4",
+    "@rollup/rollup-darwin-x64": "^4.52.4",
+    "@rollup/rollup-linux-x64-gnu": "^4.52.4"
+  },
+  "dependencies": {}
+}
