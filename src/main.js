@@ -46,8 +46,81 @@ try {
   if (raw) store = { ...store, ...JSON.parse(raw) };
 } catch (e) { /* ignore */ }
 
-function saveStore() {
+/* ---------------- 云端同步（可选：进度存到你自己的 MySQL） ----------------
+   默认走 localStorage（本机）。若在“☁ 账号”面板填了 用户名/口令/服务器地址，
+   则每次保存会防抖同步到后端 API，后端写进你的 user_progress 表。
+   后端不可达时静默降级为 localStorage，不丢数据。 */
+const LS_BACKEND = 'xk_backend_url';
+const LS_USER = 'xk_user';
+const LS_PASS = 'xk_pass';
+let BACKEND_BASE = localStorage.getItem(LS_BACKEND) || '';   // 空=同源（本地开发）；线上填隧道 URL
+let progUser = localStorage.getItem(LS_USER) || '';
+let progPass = localStorage.getItem(LS_PASS) || '';
+
+function persistLocal() {
   try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (e) { /* ignore */ }
+}
+
+function saveStore() {
+  persistLocal();
+  scheduleSync();
+}
+
+let _syncTimer = null;
+function scheduleSync() {
+  if (!progUser) return;                 // 没设账号就不联网
+  if (_syncTimer) clearTimeout(_syncTimer);
+  _syncTimer = setTimeout(syncProgress, 800);
+}
+
+async function syncProgress() {
+  if (!progUser) return;
+  const base = BACKEND_BASE || '';
+  try {
+    const res = await fetch(`${base}/api/progress?user=${encodeURIComponent(progUser)}&passcode=${encodeURIComponent(progPass)}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(store)
+    });
+    if (res.ok) {
+      const j = await res.json().catch(() => ({}));
+      if (j && j.ok === false) { showSyncStatus('同步被拒：' + (j.error || '口令错误'), 'err'); return; }
+      showSyncStatus('已同步到云端 ✓', 'ok');
+    } else {
+      showSyncStatus('同步失败（HTTP ' + res.status + '）', 'err');
+    }
+  } catch (e) {
+    showSyncStatus('同步失败（后端不可达，已存本机）', 'err');
+  }
+}
+
+async function loadCloudProgress(merge) {
+  if (!progUser) { showSyncStatus('请先在“☁ 账号”里填写用户名', 'err'); return false; }
+  const base = BACKEND_BASE || '';
+  try {
+    const res = await fetch(`${base}/api/progress?user=${encodeURIComponent(progUser)}`);
+    if (!res.ok) { showSyncStatus('加载失败（HTTP ' + res.status + '）', 'err'); return false; }
+    const cloud = await res.json().catch(() => ({}));
+    if (cloud && typeof cloud === 'object' && Object.keys(cloud).length) {
+      if (merge) store = { ...store, ...cloud };
+      persistLocal();
+      updateProgress(); updateCoinDisplay(); buildChapterNav();
+      showSyncStatus('已从云端加载 ✓', 'ok');
+      return true;
+    }
+    showSyncStatus('云端暂无进度', 'ok');
+    return false;
+  } catch (e) {
+    showSyncStatus('加载失败（后端不可达）', 'err');
+    return false;
+  }
+}
+
+function showSyncStatus(msg, type) {
+  const el = document.getElementById('syncStatus');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'sync-status' + (type ? ' sync-' + type : '');
 }
 
 let totalUnits = 0;
@@ -2030,6 +2103,20 @@ async function bootstrap() {
   allBlocks = [...allChapters];
   totalUnits = allChapters.length;
 
+  // 若已配置账号，优先从云端拉取进度合并（云端为准；不可达则仍用本机）
+  if (progUser) {
+    try {
+      const cres = await fetch(`${BACKEND_BASE || ''}/api/progress?user=${encodeURIComponent(progUser)}`);
+      if (cres.ok) {
+        const cloud = await cres.json().catch(() => ({}));
+        if (cloud && typeof cloud === 'object' && Object.keys(cloud).length) {
+          store = { ...store, ...cloud };
+          persistLocal();
+        }
+      }
+    } catch (e) { /* 后端不可达则用本机进度 */ }
+  }
+
   if (failed > 0) {
     const bar = document.createElement('div');
     bar.className = 'data-warn';
@@ -2039,7 +2126,7 @@ async function bootstrap() {
     // 线上静态部署的正常状态：不是错误，只是提示数据来自发布时快照
     const bar = document.createElement('div');
     bar.className = 'data-warn data-warn-static';
-    bar.textContent = `📦 当前使用随包内置的静态数据（${staticCount} 项，未连接后端）：功能完整可用，学习进度保存在本机浏览器。`;
+    bar.textContent = `📦 当前使用随包内置的静态数据（${staticCount} 项）：功能完整可用。学习进度默认存本机浏览器；点右上角「☁ 账号」可同步保存到你自己数据库。`;
     document.body.appendChild(bar);
     setTimeout(() => bar.remove(), 6000);
   }
@@ -2093,4 +2180,100 @@ bootstrap();
     if (store.logoClicks <= 7) saveStore();
     if (store.logoClicks === 7) checkAchievements();   // 第 7 次触发判定
   });
+})();
+
+/* ☁ 账号 / 云端同步面板（动态生成，不依赖 index.html 改动）
+   功能：设置 用户名/口令/服务器地址；保存后进度会同步进你自己的 MySQL；
+   也可手动“立即同步”或“从云端加载”。未设置账号时行为与原来一致（仅本机）。 */
+(function initAccountUI() {
+  if (!document.getElementById('accountStyle')) {
+    const st = document.createElement('style');
+    st.id = 'accountStyle';
+    st.textContent = `
+.account-btn{margin-left:10px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);
+  color:#fff;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:13px;white-space:nowrap;}
+.account-btn:hover{background:rgba(255,255,255,.28);}
+.account-modal-mask{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;
+  align-items:center;justify-content:center;z-index:1000;}
+.account-modal-mask.show{display:flex;}
+.account-modal{width:380px;max-width:92vw;background:#fff;color:#222;border-radius:14px;
+  padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.35);font-size:14px;}
+.account-modal h3{margin:0 0 10px;font-size:17px;}
+.account-modal .acc-tip{margin:0 0 14px;font-size:12px;line-height:1.7;color:#666;}
+.acc-field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;font-size:12px;color:#555;}
+.acc-field input{height:34px;border:1px solid #d7d7e0;border-radius:8px;padding:0 10px;font-size:14px;
+  outline:none;box-sizing:border-box;}
+.acc-field input:focus{border-color:#5b7cfa;}
+.sync-status{min-height:18px;font-size:12px;margin:4px 0 12px;color:#888;}
+.sync-status.sync-ok{color:#1a9e54;} .sync-status.sync-err{color:#d8412f;}
+.acc-actions{display:flex;flex-wrap:wrap;gap:8px;}
+.acc-btn{flex:1;min-width:88px;height:36px;border:none;border-radius:8px;cursor:pointer;
+  font-size:13px;background:#eef0f6;color:#333;}
+.acc-btn:hover{background:#e2e5ef;}
+.acc-btn.primary{background:#5b7cfa;color:#fff;} .acc-btn.primary:hover{background:#4a6cf0;}
+`;
+    document.head.appendChild(st);
+  }
+
+  const topbar = document.querySelector('.topbar-inner');
+  const resetBtn = document.getElementById('resetBtn');
+  if (topbar && !document.getElementById('accountBtn')) {
+    const btn = document.createElement('button');
+    btn.id = 'accountBtn';
+    btn.className = 'account-btn';
+    btn.title = '账号 / 云端同步设置';
+    btn.textContent = '☁ 账号';
+    if (resetBtn) topbar.insertBefore(btn, resetBtn); else topbar.appendChild(btn);
+    btn.addEventListener('click', openAccountModal);
+  }
+
+  if (!document.getElementById('accountMask')) {
+    const mask = document.createElement('div');
+    mask.id = 'accountMask';
+    mask.className = 'account-modal-mask';
+    mask.innerHTML = `
+      <div class="account-modal">
+        <h3>☁ 账号 / 云端同步</h3>
+        <p class="acc-tip">填写后，学习进度（章节、金币、图鉴、抽卡记录等）会同步保存到
+          <b>你自己的 MySQL</b>，换设备 / 清缓存也能找回。服务器地址留空=本地同源（本地开发时用）。</p>
+        <label class="acc-field">用户名<input id="accUser" type="text" placeholder="如 laodeng" autocomplete="off"></label>
+        <label class="acc-field">口令<input id="accPass" type="password" placeholder="与后端 app.passcode 一致"></label>
+        <label class="acc-field">服务器地址<input id="accUrl" type="text" placeholder="留空=本地；或填隧道URL，如 https://xxx.trycloudflare.com"></label>
+        <div id="syncStatus" class="sync-status"></div>
+        <div class="acc-actions">
+          <button id="accSave" class="acc-btn primary">保存设置</button>
+          <button id="accPush" class="acc-btn">立即同步</button>
+          <button id="accPull" class="acc-btn">从云端加载</button>
+          <button id="accClose" class="acc-btn">关闭</button>
+        </div>
+      </div>`;
+    document.body.appendChild(mask);
+    mask.addEventListener('click', (e) => { if (e.target === mask) mask.classList.remove('show'); });
+    document.getElementById('accClose').addEventListener('click', () => mask.classList.remove('show'));
+    document.getElementById('accSave').addEventListener('click', () => {
+      progUser = document.getElementById('accUser').value.trim();
+      progPass = document.getElementById('accPass').value;
+      BACKEND_BASE = document.getElementById('accUrl').value.trim();
+      localStorage.setItem(LS_USER, progUser);
+      localStorage.setItem(LS_PASS, progPass);
+      localStorage.setItem(LS_BACKEND, BACKEND_BASE);
+      showSyncStatus('设置已保存', 'ok');
+      loadCloudProgress(true);          // 切换账号后拉取该账号进度
+      updateProgress(); updateCoinDisplay();
+    });
+    document.getElementById('accPush').addEventListener('click', syncProgress);
+    document.getElementById('accPull').addEventListener('click', () => loadCloudProgress(true));
+    document.getElementById('accUser').value = progUser;
+    document.getElementById('accPass').value = progPass;
+    document.getElementById('accUrl').value = BACKEND_BASE;
+  }
+
+  function openAccountModal() {
+    const mask = document.getElementById('accountMask');
+    document.getElementById('accUser').value = progUser;
+    document.getElementById('accPass').value = progPass;
+    document.getElementById('accUrl').value = BACKEND_BASE;
+    showSyncStatus('', '');
+    mask.classList.add('show');
+  }
 })();

@@ -13,7 +13,9 @@ public class CorsConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("http://localhost:8000")
+                        // 个人学习后端，放行为 *；写操作另有 app.passcode 守门。
+                // 允许：GitHub Pages 线上源、本地 vite 预览、本地后端同机开发。
+                        .allowedOriginPatterns("*")
                         .allowedMethods("GET", "POST", "OPTIONS")
                         .allowCredentials(false);
             }

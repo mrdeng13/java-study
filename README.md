@@ -149,6 +149,16 @@ bash scripts/run-backend.sh
 > 前端通过 Vite 代理（`vite.config.js` 中 `/api` → `http://localhost:8080`）访问后端，无需处理跨域。若后端未启动，页面顶部会显示黄色提示条，并仅渲染已可用的内容。
 > 数据记录共 **28** 条（26 条教程数据 + `summonPool` 召唤卡池 + `syllabusDetails` 知识清单单元详解）。
 
+## 云端进度同步（学习进度落库）
+
+默认进度只存浏览器 `localStorage`。若想进度写进你自己的 MySQL、换设备也能找回：
+
+1. 后端新增了进度读写接口：`GET /api/progress?user=<名>`、`POST /api/progress?user=<名>&passcode=<口令>`（body 为整份 store 的 JSON），数据落在 `java_tutorial.user_progress` 表，首次访问自动建表。
+2. 线上是纯静态托管，浏览器碰不到 MySQL，需要把本机后端经**内网穿透**暴露到公网。详见 **[TUNNEL.md](TUNNEL.md)**（Cloudflare 临时隧道 / 稳定隧道两种方案）。
+3. 站点右上角新增 **☁ 账号** 按钮：填 用户名 / 口令（= `backend/src/main/resources/application.properties` 里的 `app.passcode`）/ 服务器地址（隧道 URL，本机调试留空），保存后即自动双向同步，后端不可达时静默降级为本机存储。
+
+> 安全提示：`app.passcode` 是共享口令，只为挡住陌生人乱写；不用时关掉隧道 / 后端即可下线，且不要让 MySQL 的 3306 直接暴露公网。
+
 ---
 
 ## 金币召唤系统（学习激励）
